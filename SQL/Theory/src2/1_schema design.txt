@@ -1,0 +1,352 @@
+sqlite> .schema   ### to view schema in sqlite
+CREATE TABLE "authors" (
+    "id" INTEGER,
+    "name" TEXT,
+    "country" TEXT,
+    "birth" INTEGER,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "authored" (
+    "author_id" INTEGER,
+    "book_id" INTEGER,
+    FOREIGN KEY("author_id") REFERENCES "authors"("id"),
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+CREATE TABLE "books" (
+    "id" INTEGER,
+    "isbn" TEXT,
+    "title" TEXT,
+    "publisher_id" INTEGER,
+    "format" TEXT,
+    "pages" INTEGER,
+    "published" TEXT,
+    "year" INTEGER,
+    PRIMARY KEY("id"),
+    FOREIGN KEY("publisher_id") REFERENCES "publishers"("id")
+);
+CREATE TABLE "publishers" (
+    "id" INTEGER,
+    "publisher" TEXT,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "ratings" (
+    "book_id" INTEGER,
+    "rating" INTEGER,
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+CREATE TABLE "translators" (
+    "id" INTEGER,
+    "name" TEXT,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "translated" (
+    "translator_id" INTEGER,
+    "book_id" INTEGER,
+    FOREIGN KEY("translator_id") REFERENCES "translators"("id"),
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+sqlite>
+
+sqlite> .schema books
+CREATE TABLE "books" (
+    "id" INTEGER,
+    "isbn" TEXT,
+    "title" TEXT,
+    "publisher_id" INTEGER,
+    "format" TEXT,
+    "pages" INTEGER,
+    "published" TEXT,
+    "year" INTEGER,
+    PRIMARY KEY("id"),
+    FOREIGN KEY("publisher_id") REFERENCES "publishers"("id")
+);
+sqlite> ### to view schema of a table
+
+
+
+==================================================================================================
+
+### Creating Own Schema Design:
+
+
+
+sqlite> .schema
+CREATE TABLE "authors" (
+    "id" INTEGER,
+    "name" TEXT,
+    "country" TEXT,
+    "birth" INTEGER,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "authored" (
+    "author_id" INTEGER,
+    "book_id" INTEGER,
+    FOREIGN KEY("author_id") REFERENCES "authors"("id"),
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+CREATE TABLE "books" (
+    "id" INTEGER,
+    "isbn" TEXT,
+    "title" TEXT,
+    "publisher_id" INTEGER,
+    "format" TEXT,
+    "pages" INTEGER,
+    "published" TEXT,
+    "year" INTEGER,
+    PRIMARY KEY("id"),
+    FOREIGN KEY("publisher_id") REFERENCES "publishers"("id")
+);
+CREATE TABLE "publishers" (
+    "id" INTEGER,
+    "publisher" TEXT,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "ratings" (
+    "book_id" INTEGER,
+    "rating" INTEGER,
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+CREATE TABLE "translators" (
+    "id" INTEGER,
+    "name" TEXT,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "translated" (
+    "translator_id" INTEGER,
+    "book_id" INTEGER,
+    FOREIGN KEY("translator_id") REFERENCES "translators"("id"),
+    FOREIGN KEY("book_id") REFERENCES "books"("id")
+);
+sqlite> .schema books
+CREATE TABLE "books" (
+    "id" INTEGER,
+    "isbn" TEXT,
+    "title" TEXT,
+    "publisher_id" INTEGER,
+    "format" TEXT,
+    "pages" INTEGER,
+    "published" TEXT,
+    "year" INTEGER,
+    PRIMARY KEY("id"),
+    FOREIGN KEY("publisher_id") REFERENCES "publishers"("id")
+);
+sqlite> ### to view schema of a table
+sqlite>
+sqlite>
+sqlite> .quit
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week1>dir
+ Volume in drive R is New Volume
+ Volume Serial Number is B2AA-4410
+
+ Directory of R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week1
+
+06/20/2026  01:46 PM    <DIR>          .
+06/20/2026  01:46 PM    <DIR>          ..
+06/19/2026  10:30 PM         6,709,248 longlist.db
+06/19/2026  10:30 PM            12,288 sea_lions.db
+               2 File(s)      6,721,536 bytes
+               2 Dir(s)  13,083,348,992 bytes free
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week1>cd ..
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database>dir
+ Volume in drive R is New Volume
+ Volume Serial Number is B2AA-4410
+
+ Directory of R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database
+
+06/20/2026  01:46 PM    <DIR>          .
+06/20/2026  01:46 PM    <DIR>          ..
+06/20/2026  01:46 PM    <DIR>          week0
+06/20/2026  01:46 PM    <DIR>          week1
+               0 File(s)              0 bytes
+               4 Dir(s)  13,083,348,992 bytes free
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database>mkdir week2
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database>cd week2
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>dir
+ Volume in drive R is New Volume
+ Volume Serial Number is B2AA-4410
+
+ Directory of R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2
+
+06/20/2026  02:08 PM    <DIR>          .
+06/20/2026  02:08 PM    <DIR>          ..
+               0 File(s)              0 bytes
+               2 Dir(s)  13,083,348,992 bytes free
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>sqlite3 mbta.db
+SQLite version 3.53.2 2026-06-03 19:12:13
+Enter ".help" for usage hints.
+sqlite> .schema
+sqlite> .table
+sqlite> CREATE TABLE "riders" (
+(x1...>     "id",
+(x1...>     "name"
+(x1...> );
+sqlite> .tables
+riders
+sqlite> ### creating riders table with two columns
+sqlite>
+sqlite>
+sqlite> CREATE TABLE "stations" (
+(x1...>     "id",
+(x1...>     "name",
+(x1...>     "line"
+(x1...> );
+sqlite> .schema
+CREATE TABLE "riders" (
+    "id",
+    "name"
+);
+CREATE TABLE "stations" (
+    "id",
+    "name",
+    "line"
+);
+sqlite> ### now, We have created riders and stations table, to create relationsip between them. Creates relationship betweem them we follow below stpes:
+sqlite>
+sqlite>
+sqlite> ### Create new table called "visits" to create realtionship
+sqlite> ### between riders table and stations table
+sqlite>
+sqlite> CREATE TABLE "visits" (
+(x1...>     "rider_id",
+(x1...>     "station_id"
+(x1...> );
+sqlite> ### visits table links riders and station table
+sqlite>
+sqlite>
+sqlite> .schema
+CREATE TABLE "riders" (
+    "id",
+    "name"
+);
+CREATE TABLE "stations" (
+    "id",
+    "name",
+    "line"
+);
+CREATE TABLE "visits" (
+    "rider_id",
+    "station_id"
+);
+sqlite> ### visits table aslo called junction table
+sqlite>
+sqlite> ### Now we already created columns inside table,
+sqlite> ## to fill data on these columns, we need to understand Data Types and Storage classes
+sqlite>
+sqlite> ### Data Types and #Storage Class
+sqlite>
+sqlite>
+sqlite> ## Squlite have 5 storage classes
+sqlite> # NULL
+sqlite> # INTEGER
+sqlite> # REAL
+sqlite> #TEXT
+sqlite> # BLOB
+sqlite>
+sqlite>
+sqlite> ### TYPE Affinity:
+sqlite>
+sqlite> ### TYPE Affinity: TEXT, NUMERIC, INTEGERS, REAL, BLOB
+sqlite>
+sqlite>
+sqlite>
+sqlite> ### use DROP to delete TABLEs
+sqlite> .SCHEMA
+Error: unknown command or invalid arguments:  "SCHEMA". Enter ".help" for help
+sqlite> .schema
+CREATE TABLE "riders" (
+    "id",
+    "name"
+);
+CREATE TABLE "stations" (
+    "id",
+    "name",
+    "line"
+);
+CREATE TABLE "visits" (
+    "rider_id",
+    "station_id"
+);
+sqlite> DROP TABLES "riders";
+Parse error near line 56: near "TABLES": syntax error
+  DROP TABLES "riders";
+       ^--- error here
+sqlite> DROP TABLE "riders";
+sqlite> .schema
+CREATE TABLE "stations" (
+    "id",
+    "name",
+    "line"
+);
+CREATE TABLE "visits" (
+    "rider_id",
+    "station_id"
+);
+sqlite> DROP TABLE "stations";
+sqlite> .schema
+CREATE TABLE "visits" (
+    "rider_id",
+    "station_id"
+);
+sqlite> DROP TABLE "visits";
+sqlite> .schema
+sqlite> ### all tables got dropped from schema
+sqlite>
+sqlite>
+sqlite> .quit
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>code schema.sql
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>ls
+'ls' is not recognized as an internal or external command,
+operable program or batch file.
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>dir
+ Volume in drive R is New Volume
+ Volume Serial Number is B2AA-4410
+
+ Directory of R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2
+
+06/20/2026  02:59 PM    <DIR>          .
+06/20/2026  02:59 PM    <DIR>          ..
+06/20/2026  02:50 PM            16,384 mbta.db
+06/20/2026  02:59 PM               230 schema.sql
+               2 File(s)         16,614 bytes
+               2 Dir(s)  13,083,332,608 bytes free
+
+R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\database\week2>sqlite3 mbta.db
+SQLite version 3.53.2 2026-06-03 19:12:13
+Enter ".help" for usage hints.
+sqlite> ## to read schema with .sql file.
+sqlite>
+sqlite> .read schema.sql
+sqlite> ### nothing shows
+sqlite> .schema
+CREATE TABLE "riders" (
+    "id" INTEGER,
+    "NAME" TEXT
+);
+CREATE TABLE "stations" (
+    "rider_id" INTEGER,
+    "name" TEXT,
+    "line" TEXT
+);
+CREATE TABLE "visits" (
+    "rider_id" INTEGER,
+    "station_id" INTEGER
+);
+sqlite> ### schema improved from the backend.
+sqlite>
+
+
+
+
+
