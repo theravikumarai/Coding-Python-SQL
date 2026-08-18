@@ -1,0 +1,114 @@
+ert\schema.sql
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+sqlite> 
+sqlite> SELECT * FROM "collections";                
+sqlite> ## currently database is empty
+sqlite> 
+sqlite> ## trying to insert data in db
+sqlite> 
+sqlite> INSERT INTO "collections" ("id", "title", "accession_number", "acquired")
+   ...> VALUES(1, 'Profusion of Flowers', '56.257', '1956-04-12');
+sqlite> SELECT * FROM "collections";  
+╭────┬──────────────────────┬──────────────────┬────────────╮
+│ id │        title         │ accession_number │  acquired  │
+╞════╪══════════════════════╪══════════════════╪════════════╡
+│  1 │ Profusion of Flowers │ '56.257'         │ 1956-04-12 │
+╰────┴──────────────────────┴──────────────────┴────────────╯
+sqlite> ## data got inserted
+sqlite> 
+sqlite> INSERT INTO "collections" ("id", "title", "accession_number", "acquired")
+   ...> VALUES(2, 'Farmers working at dawn', '11.6152', '1911-08-03');
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬────────────╮
+│ id │          title          │ accession_number │  acquired  │
+╞════╪═════════════════════════╪══════════════════╪════════════╡
+│  1 │ Profusion of Flowers    │ '56.257'         │ 1956-04-12 │
+│  2 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │
+╰────┴─────────────────────────┴──────────────────┴────────────╯
+sqlite> ## Now if insert data except "id column" which is primary key for this table. sqlite automatically add the primary key as its already mentioned 
+when we define schema.
+sqlite> 
+sqlite> 
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired") 
+   ...> VALUES('Spring Outing', '14.76', '1914-01-038');              
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬─────────────╮
+│ id │          title          │ accession_number │  acquired   │
+╞════╪═════════════════════════╪══════════════════╪═════════════╡
+│  1 │ Profusion of Flowers    │ '56.257'         │ 1956-04-12  │
+│  2 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03  │
+│  3 │ Spring Outing           │ '14.76'          │ 1914-01-038 │
+╰────┴─────────────────────────┴──────────────────┴─────────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> # here primary key gets increment automatically by one.
+sqlite> 
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired")
+   ...> VALUES('Spring Outing', '14.76', '1914-01-038');
+Error near line 34: UNIQUE constraint failed: collections.accession_number
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬─────────────╮
+│ id │          title          │ accession_number │  acquired   │
+╞════╪═════════════════════════╪══════════════════╪═════════════╡
+│  1 │ Profusion of Flowers    │ '56.257'         │ 1956-04-12  │
+│  2 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03  │
+│  3 │ Spring Outing           │ '14.76'          │ 1914-01-038 │
+╰────┴─────────────────────────┴──────────────────┴─────────────╯
+sqlite> 
+sqlite> 
+sqlite> # violating constrains will abort the executions
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired")
+   ...> VALUES(NULL, NULL, '1914-01-08');               
+Error near line 43: NOT NULL constraint failed: collections.title
+sqlite> 
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬─────────────╮
+│ id │          title          │ accession_number │  acquired   │
+╞════╪═════════════════════════╪══════════════════╪═════════════╡
+│  1 │ Profusion of Flowers    │ '56.257'         │ 1956-04-12  │
+│  2 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03  │
+│  3 │ Spring Outing           │ '14.76'          │ 1914-01-038 │
+╰────┴─────────────────────────┴──────────────────┴─────────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired")
+   ...> VALUES                                                             
+   ...> ('Imaginative landscape', '56.496', NULL),
+   ...> ('Peonies and butterfly', '06.1899', '1906-01-01');
+sqlite> 
+sqlite> 
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬─────────────╮
+│ id │          title          │ accession_number │  acquired   │
+╞════╪═════════════════════════╪══════════════════╪═════════════╡
+│  1 │ Profusion of Flowers    │ '56.257'         │ 1956-04-12  │
+│  2 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03  │
+│  3 │ Spring Outing           │ '14.76'          │ 1914-01-038 │
+│  4 │ Imaginative landscape   │ '56.496'         │ NULL        │
+│  5 │ Peonies and butterfly   │ '06.1899'        │ 1906-01-01  │
+╰────┴─────────────────────────┴──────────────────┴─────────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> ## to insert entire data at a time with file like csv.

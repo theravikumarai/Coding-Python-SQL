@@ -1,0 +1,878 @@
+PS R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\Harward-SQL
+SQLite version 3.53.2 2026-06-03 19:12:13
+Enter ".help" for usage hints.
+sqlite> .read schema2.sql
+Parse error near line 10 of schema2.sql: near "IF": syntax error
+  CREATE TABLE "collections" IF NOT EXISTS (     "id" INTEGER,     "title" T
+               error here ---^
+Parse error near line 18 of schema2.sql: no such table: collections
+Parse error near line 25 of schema2.sql: near "IF": syntax error
+  CREATE TABLE "artists" IF NOT EXISTS (     "id" INTEGER,     "name" TEXT N
+                         ^--- error here
+Parse error near line 31 of schema2.sql: no such table: artists
+Parse error near line 38 of schema2.sql: near "IF": syntax error
+  CREATE TABLE "created" IF NOT EXISTS (     "artist_id" INTEGER,     "colle
+                         ^--- error here
+Parse error near line 46 of schema2.sql: no such table: created
+sqlite> .schema
+sqlite> .tables
+sqlite> .read schema2.sql
+Parse error near line 6 of schema2.sql: near "DROP": syntax error
+  DROP TABLE IF EXISTS "collections"  -- %% DROP TABLE IF EXISTS "artists"  
+                              error here ---^
+sqlite> .schema          
+sqlite> DROP TABLE IF EXISTS "collections";
+sqlite> DROP TABLE IF EXISTS "artists";
+sqlite> DROP TABLE IF EXISTS "created";
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> cls
+   ...> ;
+Parse error near line 13: near "cls": syntax error
+  cls ;
+  ^--- error here
+sqlite> CREATE TABLE "collections" (
+(x1...>     "id" INTEGER,
+(x1...>     "title" TEXT NOT NULL,
+(x1...>     "accession_number" TEXT NOT NULL UNIQUE,
+(x1...>     "acquired" NUMERIC,
+(x1...>     PRIMARY KEY("id")
+(x1...> );
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired")
+   ...> VALUES 
+   ...> ('Farmers working at dawn', '11.6152', '1911-08-03'),
+   ...> ('Imaginative landscape', '56.496', NULL),
+   ...> ('Profusion of flowers', '56.257', '1956-04-12'),
+   ...> ('Spring outing', '14.76', '1914-01-08');
+sqlite> CREATE TABLE "artists" (
+(x1...>     "id" INTEGER,
+(x1...>     "name" TEXT NOT NULL,
+(x1...>     PRIMARY KEY("id")
+(x1...> );
+sqlite> INSERT INTO "artists" ("name") 
+   ...> VALUES 
+   ...> ('Li Yin'),
+   ...> ('Qian Weicheng'),
+   ...> ('Unidentified artist'),
+   ...> ('Zhou Chen');
+sqlite> 
+sqlite> 
+sqlite> CREATE TABLE "created"  (
+(x1...>     "artist_id" INTEGER,
+(x1...>     "collection_id" INTEGER,
+(x1...>     PRIMARY KEY("artist_id", "collection_id"),
+(x1...>     FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CA
+(x1...>     FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON D
+(x1...> );
+sqlite> INSERT INTO "created" ("artist_id", "collection_id")
+   ...> VALUES 
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Li Yin'), (SELECT "id" 
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Qian Weicheng'), (SELEC)),
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Unidentified artist'),  at dawn')),
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Zhou Chen'), (SELECT "i
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "artists" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CA
+);
+sqlite> SELECT * FROM "colleactions";
+Parse error near line 59: no such table: colleactions
+sqlite> SELECT * FROM "collections"; 
+╭────┬─────────────────────────┬──────────────────┬────────────╮
+│ id │          title          │ accession_number │  acquired  │
+╞════╪═════════════════════════╪══════════════════╪════════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │
+│  3 │ Profusion of flowers    │ '56.257'         │ 1956-04-12 │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │
+╰────┴─────────────────────────┴──────────────────┴────────────╯
+sqlite> SELECT * FROM "created";    
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         3 │             1 │
+│         4 │             4 │
+╰───────────┴───────────────╯
+sqlite> SELECT * FROM "artists";
+╭────┬─────────────────────╮
+│ id │        name         │
+╞════╪═════════════════════╡
+│  1 │ Li Yin              │
+│  2 │ Qian Weicheng       │
+│  3 │ Unidentified artist │
+│  4 │ Zhou Chen           │
+╰────┴─────────────────────╯
+sqlite> 
+sqlite> 
+sqlite> .schema created
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CASCADE
+);
+sqlite> DELETE FROM "artists"
+   ...> WHERE "name" = 'Unidentified artist';
+sqlite> 
+sqlite> SELECT * FROM "artists";             
+╭────┬───────────────╮
+│ id │     name      │
+╞════╪═══════════════╡
+│  1 │ Li Yin        │
+│  2 │ Qian Weicheng │
+│  4 │ Zhou Chen     │
+╰────┴───────────────╯
+sqlite> SELECT * FROM "created";    
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         3 │             1 │
+│         4 │             4 │
+╰───────────┴───────────────╯
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "artists" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CASCADE
+);
+sqlite> DELETE FROM "artists"                
+   ...> WHERE "name" = 'Unidentified artist';
+sqlite> SELECT * FROM "artists";             
+╭────┬───────────────╮
+│ id │     name      │
+╞════╪═══════════════╡
+│  1 │ Li Yin        │
+│  2 │ Qian Weicheng │
+│  4 │ Zhou Chen     │
+╰────┴───────────────╯
+sqlite> SELECT * FROM "created";             
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         3 │             1 │
+│         4 │             4 │
+╰───────────┴───────────────╯
+sqlite> DELETE FROM "artists";
+sqlite> SELECT * FROM "artists";
+sqlite> INSERT INTO "artists" ("name") 
+   ...> VALUES 
+   ...> ('Li Yin'),
+   ...> ('Qian Weicheng'),
+   ...> ('Unidentified artist'),
+   ...> ('Zhou Chen');
+sqlite> SELECT * FROM "artists";       
+╭────┬─────────────────────╮
+│ id │        name         │
+╞════╪═════════════════════╡
+│  1 │ Li Yin              │
+│  2 │ Qian Weicheng       │
+│  3 │ Unidentified artist │
+│  4 │ Zhou Chen           │
+╰────┴─────────────────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> SELECT * FROM "created";
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         3 │             1 │
+│         4 │             4 │
+╰───────────┴───────────────╯
+sqlite> UPDATE "created" SET "artist_id" = (
+(x1...>     SELECT "id" FROM "artists" 
+(x1...>     WHERE "name" = 'Li Yin'
+(x1...> );
+sqlite> SELECT * FROM "artists";            
+╭────┬─────────────────────╮
+│ id │        name         │
+╞════╪═════════════════════╡
+│  1 │ Li Yin              │
+│  2 │ Qian Weicheng       │
+│  3 │ Unidentified artist │
+│  4 │ Zhou Chen           │
+╰────┴─────────────────────╯
+sqlite> SELECT * FROM "created";
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         1 │             3 │
+│         1 │             1 │
+│         1 │             4 │
+╰───────────┴───────────────╯
+sqlite> DELETE FROM "created";
+sqlite> SELECT * FROM "crated";
+Parse error near line 98: no such table: crated
+sqlite> SELECT * FROM "created";
+sqlite> INSERT INTO "created" ("artist_id", "collection_id")
+   ...> VALUES 
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Li Yin'), (SELECT "id" FROM "collections" WHERE "title" = 'Imaginative landscape')),
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Qian Weicheng'), (SELECT "id" FROM "collections" WHERE "title" = 'Profusion of flowers')),
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Unidentified artist'), (SELECT "id" FROM "collections" WHERE "title" = 'Farmers working at dawn')),
+   ...> ((SELECT "id" FROM "artists" WHERE "name" = 'Zhou Chen'), (SELECT "id" FROM "collections" WHERE 
+"title" = 'Spring outing'));
+sqlite> SELECT * FROM "created";
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         3 │             1 │
+│         4 │             4 │
+╰───────────┴───────────────╯
+sqlite> UPDATE "created"                            
+   ...> SET "artist_id" = (
+(x1...> SELECT "id"
+(x1...> FROM "artists"
+(x1...> WHERE "name" = 'Li Yin'
+(x1...> )
+   ...> 
+   ...> WHERE "collection_id" = (
+(x1...>     SELECT "artist_id" = (
+(x2...>     ;
+Parse error near line 107: near ";": syntax error
+  collection_id" = (     SELECT "artist_id" = (     ;
+                                      error here ---^
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> UPDATE "created"
+   ...> SET "artist_id" = (
+(x1...> SELECT "id"
+(x1...> FROM "artists"
+(x1...> WHERE "name" = 'Li Yin'
+(x1...> )
+   ...> WHERE "collection_id" = (
+(x1...> SELECT "id"
+(x1...> FROM "collections"
+(x1...> WHERE "title" = 'Farmers working at dawn'
+(x1...> );
+sqlite> 
+sqlite> 
+sqlite> SELECT * FROM "created";
+╭───────────┬───────────────╮
+│ artist_id │ collection_id │
+╞═══════════╪═══════════════╡
+│         1 │             2 │
+│         2 │             3 │
+│         4 │             4 │
+sqlite> code votes.csv
+   ...> ;
+Parse error near line 134: near "code": syntax error  code votes.csv  ;
+  ^--- error here
+sqlite> .quit
+PS R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\Harward-SQL\src3> code votes.csv
+PS R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\Harward-SQL\src3> code votes.csv
+PS R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\Harward-SQL\src3> sqlite3 votes.db
+SQLite version 3.53.2 2026-06-03 19:12:13
+Enter ".help" for usage hints.
+sqlite> .import --csv votes.csv votes
+sqlite> .table
+votes
+sqlite> .schema
+CREATE TABLE "votes"(
+"title" ANY);
+sqlite> 
+sqlite> 
+sqlite> SELECT * FROM "votes";
+╭────────────────────────────╮
+│           title            │
+╞════════════════════════════╡
+│ Farmers working at dawn    │
+│ Farmers Working at Dawn    │
+│ Imaginative landscape      │
+│ Profusion of flowers       │
+│ Spring outing              │
+│ ' Spring outing'           │
+│ Imagintive landscape       │
+│ 'Farmesr working at dawn ' │
+│ Famers working at dawn     │
+│ Profusion                  │
+│ Imaginative landscape      │
+│ Profusion of flowers       │
+│ Farmers working            │
+│ ' Imaginative landscape'   │
+│ Imaginative  landscape     │
+│ Spring outing              │
+│ Spring outing              │
+│ Profusion of flowers       │
+│ SPring outing              │
+│ 'Farmers working at dawn ' │
+╰────────────────────────────╯
+sqlite> SELECT "title" FROM "votes"
+   ...>           
+   ...> ;
+╭────────────────────────────╮
+│           title            │
+╞════════════════════════════╡
+│ Farmers working at dawn    │
+│ Farmers Working at Dawn    │
+│ Imaginative landscape      │
+│ Profusion of flowers       │
+│ Spring outing              │
+│ ' Spring outing'           │
+│ Imagintive landscape       │
+│ 'Farmesr working at dawn ' │
+│ Famers working at dawn     │
+│ Profusion                  │
+│ Imaginative landscape      │
+│ Profusion of flowers       │
+│ Farmers working            │
+│ ' Imaginative landscape'   │
+│ Imaginative  landscape     │
+│ Spring outing              │
+│ Spring outing              │
+│ Profusion of flowers       │
+│ SPring outing              │
+│ 'Farmers working at dawn ' │
+╰────────────────────────────╯
+sqlite> SELECT "title" COUNT("title") FROM "votes" GROUP BY "title";
+Parse error near line 10: near "(": syntax error
+  SELECT "title" COUNT("title") FROM "votes" GROUP BY "title";
+                      ^--- error here
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭────────────────────────────┬────────────────╮
+│           title            │ COUNT("title") │
+╞════════════════════════════╪════════════════╡
+│ ' Imaginative landscape'   │              1 │
+│ ' Spring outing'           │              1 │
+│ Famers working at dawn     │              1 │
+│ Farmers Working at Dawn    │              1 │
+│ Farmers working            │              1 │
+│ Farmers working at dawn    │              1 │
+│ 'Farmers working at dawn ' │              1 │
+│ 'Farmesr working at dawn ' │              1 │
+│ Imaginative  landscape     │              1 │
+│ Imaginative landscape      │              2 │
+│ Imagintive landscape       │              1 │
+│ Profusion                  │              1 │
+│ Profusion of flowers       │              3 │
+│ SPring outing              │              1 │
+│ Spring outing              │              3 │
+╰────────────────────────────┴────────────────╯
+sqlite> 
+sqlite> 
+sqlite> ## trim : removes leading and trailing white spaces
+sqlite> 
+sqlite> UPDATE "votes" SET "title" = trim("title");
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ Famers working at dawn  │              1 │
+│ Farmers Working at Dawn │              1 │
+│ Farmers working         │              1 │
+│ Farmers working at dawn │              2 │
+│ Farmesr working at dawn │              1 │
+│ Imaginative  landscape  │              1 │
+│ Imaginative landscape   │              3 │
+│ Imagintive landscape    │              1 │
+│ Profusion               │              1 │
+│ Profusion of flowers    │              3 │
+│ SPring outing           │              1 │
+│ Spring outing           │              4 │
+╰─────────────────────────┴────────────────╯
+sqlite> UPDATE "votes" SET "title" = upper("title");     -- upper() convert 
+all text in upper
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";       
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ FAMERS WORKING AT DAWN  │              1 │
+│ FARMERS WORKING         │              1 │
+│ FARMERS WORKING AT DAWN │              3 │
+│ FARMESR WORKING AT DAWN │              1 │
+│ IMAGINATIVE  LANDSCAPE  │              1 │
+│ IMAGINATIVE LANDSCAPE   │              3 │
+│ IMAGINTIVE LANDSCAPE    │              1 │
+│ PROFUSION               │              1 │
+│ PROFUSION OF FLOWERS    │              3 │
+│ SPRING OUTING           │              5 │
+╰─────────────────────────┴────────────────╯
+sqlite> 
+sqlite> 
+sqlite> UPDATE "votes" SET "title" = 'FARMERS WORKING AT DAWN' 
+   ...> WHERE "title" = 'FAMERS WORKING AT DAWN';
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ FARMERS WORKING         │              1 │
+│ FARMERS WORKING AT DAWN │              4 │
+│ FARMESR WORKING AT DAWN │              1 │
+│ IMAGINATIVE  LANDSCAPE  │              1 │
+│ IMAGINATIVE LANDSCAPE   │              3 │
+│ IMAGINTIVE LANDSCAPE    │              1 │
+│ PROFUSION               │              1 │
+│ PROFUSION OF FLOWERS    │              3 │
+│ SPRING OUTING           │              5 │
+╰─────────────────────────┴────────────────╯
+sqlite> UPDATE "votes" SET "title" = 'FARMERS WORKING AT DAWN'              
+   ...> WHERE "title" = 'FARMERS WORKING';       
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ FARMERS WORKING AT DAWN │              5 │
+│ FARMESR WORKING AT DAWN │              1 │
+│ IMAGINATIVE  LANDSCAPE  │              1 │
+│ IMAGINATIVE LANDSCAPE   │              3 │
+│ IMAGINTIVE LANDSCAPE    │              1 │
+│ PROFUSION               │              1 │
+│ PROFUSION OF FLOWERS    │              3 │
+│ SPRING OUTING           │              5 │
+╰─────────────────────────┴────────────────╯
+sqlite> ### better way
+sqlite> 
+sqlite> 
+sqlite> UPDATE "votes" SET "title" = 'FARMERS WORKING AT DAWN'
+   ...> WHERE "title" LIKE 'Fa%';
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ FARMERS WORKING AT DAWN │              6 │
+│ IMAGINATIVE  LANDSCAPE  │              1 │
+│ IMAGINATIVE LANDSCAPE   │              3 │
+│ IMAGINTIVE LANDSCAPE    │              1 │
+│ PROFUSION               │              1 │
+│ PROFUSION OF FLOWERS    │              3 │
+│ SPRING OUTING           │              5 │
+╰─────────────────────────┴────────────────╯
+sqlite> UPDATE "votes" SET "title" = 'IMAGINTIVE LANDSCAPE'   
+   ...> WHERE "title" LIKE 'IMAG%';
+sqlite> UPDATE "votes" SET "title" = 'PROFUSION OF FLOWERS'
+   ...> WHERE "title" LIKE 'PROFUSION%';        
+sqlite> SELECT "title", COUNT("title") FROM "votes" GROUP BY "title";
+╭─────────────────────────┬────────────────╮
+│          title          │ COUNT("title") │
+╞═════════════════════════╪════════════════╡
+│ FARMERS WORKING AT DAWN │              6 │
+│ IMAGINTIVE LANDSCAPE    │              5 │
+│ PROFUSION OF FLOWERS    │              4 │
+│ SPRING OUTING           │              5 │
+╰─────────────────────────┴────────────────╯
+sqlite> SELECT * FROM "votes";
+╭─────────────────────────╮
+│          title          │
+╞═════════════════════════╡
+│ FARMERS WORKING AT DAWN │
+│ FARMERS WORKING AT DAWN │
+│ IMAGINTIVE LANDSCAPE    │
+│ PROFUSION OF FLOWERS    │
+│ SPRING OUTING           │
+│ SPRING OUTING           │
+│ IMAGINTIVE LANDSCAPE    │
+│ FARMERS WORKING AT DAWN │
+│ FARMERS WORKING AT DAWN │
+│ PROFUSION OF FLOWERS    │
+│ IMAGINTIVE LANDSCAPE    │
+│ PROFUSION OF FLOWERS    │
+│ FARMERS WORKING AT DAWN │
+│ IMAGINTIVE LANDSCAPE    │
+│ IMAGINTIVE LANDSCAPE    │
+│ SPRING OUTING           │
+│ SPRING OUTING           │
+│ PROFUSION OF FLOWERS    │
+│ SPRING OUTING           │
+│ FARMERS WORKING AT DAWN │
+╰─────────────────────────╯
+sqlite> 
+sqlite> 
+sqlite> CREATE TABLE "transactions" (
+(x1...> "id" INTEGER,
+(x1...> "title" TEXT,
+(x1...> "action" TEXT,
+(x1...> PRIMARY KEY("id")
+(x1...> );
+sqlite> 
+sqlite> 
+sqlite> .tables
+transactions     votes
+sqlite> SELECT * FROM "transcations";
+sqlite> SELECT * FROM "transations"; 
+Parse error near line 52: no such table: transations
+sqlite> SELECT * FROM "transactions";
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> CREATE TRIGGER "sell"
+   ...> BEFORE DELETE ON "collections"
+   ...> FOR EACH ROE
+   ...> ;;
+   ...> 
+   ...> 
+   ...> ;;;
+   ...> "
+"  ...> ;''
+"  ...> 
+"  ...> '''
+"  ...> 
+"  ...> 
+"  ...> ;
+"  ...> DJF
+"  ...> FL:
+"  ...> '
+"  ...> ;
+"  ...> 
+"  ...> EXIT
+"  ...> .QUIT
+"  ...> 
+"  ...> .quit
+"  ...> transactions
+"  ...> Program interrupted.
+PS R:\raviikrds\Professional\Git-Reposities\Learning\Courses\SQL\Harward-SQL\src3> sqlite3 mfa.db  
+SQLite version 3.53.2 2026-06-03 19:12:13
+Enter ".help" for usage hints.
+sqlite> .tables
+artists     collections     created
+sqlite> CREATE TABLE "transactions" (
+(x1...> "id" INTEGER,
+(x1...> "title" TEXT,
+(x1...> "action" TEXT,
+(x1...> PRIMARY KEY("id")
+(x1...> );
+sqlite> .tables
+artists     collections     created     transactions
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "artists" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CASCADE
+);
+CREATE TABLE "transactions" (
+"id" INTEGER,
+"title" TEXT,
+"action" TEXT,
+PRIMARY KEY("id")
+);
+sqlite> CREATE TRIGGER "sell"
+   ...> BEFORE DELETE ON "collections"
+   ...> FOR EACH ROW
+   ...> BEGIN
+   ...>     INSERT INTO "transactions" ("title", "action")
+   ...>     VALUES (OLD."title", 'sold');
+   ...> END;
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> .SCHEMA
+Error: unknown command or invalid arguments:  "SCHEMA". Enter ".help" for help
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "artists" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CASCADE
+);
+CREATE TABLE "transactions" (
+"id" INTEGER,
+"title" TEXT,
+"action" TEXT,
+PRIMARY KEY("id")
+);
+CREATE TRIGGER "sell"
+BEFORE DELETE ON "collections"
+FOR EACH ROW
+BEGIN
+    INSERT INTO "transactions" ("title", "action")
+    VALUES (OLD."title", 'sold');
+END;
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> SELECT * FORM "collections";
+Parse error near line 25: near "FORM": syntax error
+  SELECT * FORM "collections";
+           ^--- error here
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬────────────╮
+│ id │          title          │ accession_number │  acquired  │
+╞════╪═════════════════════════╪══════════════════╪════════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │
+│  3 │ Profusion of flowers    │ '56.257'         │ 1956-04-12 │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │
+╰────┴─────────────────────────┴──────────────────┴────────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> DELETE FROM "collections" WHERE "title" = 'Profusion of flowers';
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬────────────╮
+│ id │          title          │ accession_number │  acquired  │
+╞════╪═════════════════════════╪══════════════════╪════════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │
+╰────┴─────────────────────────┴──────────────────┴────────────╯
+sqlite> SELECT * FROM "transactions";
+╭────┬──────────────────────┬────────╮
+│ id │        title         │ action │
+╞════╪══════════════════════╪════════╡
+│  1 │ Profusion of flowers │ sold   │
+╰────┴──────────────────────┴────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> CREATE TRIGGER "buy"
+   ...> AFTER INSERT ON "collections"
+   ...> BEGIN
+   ...> INSERT INTO "transactions" ("title", "action")
+   ...> VALUES (NEW."title", 'bought');
+   ...> END;
+sqlite> 
+sqlite> 
+sqlite> .schema
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "artists" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL,
+    PRIMARY KEY("id")
+);
+CREATE TABLE "created"  (
+    "artist_id" INTEGER,
+    "collection_id" INTEGER,
+    PRIMARY KEY("artist_id", "collection_id"),
+    FOREIGN KEY("artist_id") REFERENCES "artists"("id") ON DELETE CASCADE,
+    FOREIGN KEY("collection_id") REFERENCES "collections"("id") ON DELETE CASCADE
+);
+CREATE TABLE "transactions" (
+"id" INTEGER,
+"title" TEXT,
+"action" TEXT,
+PRIMARY KEY("id")
+);
+CREATE TRIGGER "sell"
+BEFORE DELETE ON "collections"
+FOR EACH ROW
+BEGIN
+    INSERT INTO "transactions" ("title", "action")
+    VALUES (OLD."title", 'sold');
+END;
+CREATE TRIGGER "buy"
+AFTER INSERT ON "collections"
+BEGIN
+INSERT INTO "transactions" ("title", "action")
+VALUES (NEW."title", 'bought');
+END;
+sqlite> INSERT INTO "collections" ("title", "accession_number", "acquired")
+   ...> VALUES ('UNITY OF INDIA', '56.56', '2026-06-06');
+sqlite> SELECT * FROM "transactions";
+╭────┬──────────────────────┬────────╮
+│ id │        title         │ action │
+╞════╪══════════════════════╪════════╡
+│  1 │ Profusion of flowers │ sold   │
+│  2 │ UNITY OF INDIA       │ bought │
+╰────┴──────────────────────┴────────╯
+sqlite> SELECT * FROM "collections"; 
+╭────┬─────────────────────────┬──────────────────┬────────────╮
+│ id │          title          │ accession_number │  acquired  │
+╞════╪═════════════════════════╪══════════════════╪════════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │
+│  5 │ UNITY OF INDIA          │ '56.56'          │ 2026-06-06 │
+╰────┴─────────────────────────┴──────────────────┴────────────╯
+sqlite> SELECT * FROM "transactions";
+╭────┬──────────────────────┬────────╮
+│ id │        title         │ action │
+╞════╪══════════════════════╪════════╡
+│  1 │ Profusion of flowers │ sold   │
+│  2 │ UNITY OF INDIA       │ bought │
+╰────┴──────────────────────┴────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> .schema collections
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC,
+    PRIMARY KEY("id")
+);
+CREATE TRIGGER "sell"
+BEFORE DELETE ON "collections"
+FOR EACH ROW
+BEGIN
+    INSERT INTO "transactions" ("title", "action")
+    VALUES (OLD."title", 'sold');
+END;
+CREATE TRIGGER "buy"
+AFTER INSERT ON "collections"
+BEGIN
+INSERT INTO "transactions" ("title", "action")
+VALUES (NEW."title", 'bought');
+END;
+sqlite> ALTER TABLE "collections" 
+   ...> ADD COLUMN "deleted" INTEGER DEFAULT 0;
+sqlite> 
+sqlite> .schema collections                    
+CREATE TABLE "collections" (
+    "id" INTEGER,
+    "title" TEXT NOT NULL,
+    "accession_number" TEXT NOT NULL UNIQUE,
+    "acquired" NUMERIC, "deleted" INTEGER DEFAULT 0,
+    PRIMARY KEY("id")
+);
+CREATE TRIGGER "sell"
+BEFORE DELETE ON "collections"
+FOR EACH ROW
+BEGIN
+    INSERT INTO "transactions" ("title", "action")
+    VALUES (OLD."title", 'sold');
+END;
+CREATE TRIGGER "buy"
+AFTER INSERT ON "collections"
+BEGIN
+INSERT INTO "transactions" ("title", "action")
+VALUES (NEW."title", 'bought');
+END;
+sqlite> 
+sqlite> 
+sqlite> SELECTE * FORM "collections";
+Parse error near line 60: near "SELECTE": syntax error
+  SELECTE * FORM "collections";
+  ^--- error here
+sqlite> SELECT * FORM "collections"; 
+Parse error near line 61: near "FORM": syntax error
+  SELECT * FORM "collections";
+           ^--- error here
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬────────────┬─────────╮
+│ id │          title          │ accession_number │  acquired  │ deleted │
+╞════╪═════════════════════════╪══════════════════╪════════════╪═════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │       0 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │       0 │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │       0 │
+│  5 │ UNITY OF INDIA          │ '56.56'          │ 2026-06-06 │       0 │
+╰────┴─────────────────────────┴──────────────────┴────────────┴─────────╯
+sqlite> 
+sqlite> 
+sqlite> UPDATE "collections" SET "deleted" = 1 WHERE "title" = 'Farmers working at dawn';
+sqlite> SELECT * FROM "collections";
+╭────┬─────────────────────────┬──────────────────┬────────────┬─────────╮
+│ id │          title          │ accession_number │  acquired  │ deleted │
+╞════╪═════════════════════════╪══════════════════╪════════════╪═════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │       1 │
+│  2 │ Imaginative landscape   │ '56.496'         │ NULL       │       0 │
+│  4 │ Spring outing           │ '14.76'          │ 1914-01-08 │       0 │
+│  5 │ UNITY OF INDIA          │ '56.56'          │ 2026-06-06 │       0 │
+╰────┴─────────────────────────┴──────────────────┴────────────┴─────────╯
+sqlite> 
+sqlite> SELECT * FROM "collections"
+   ...> WHERE "deleted" != 1;
+╭────┬───────────────────────┬──────────────────┬────────────┬─────────╮
+│ id │         title         │ accession_number │  acquired  │ deleted │
+╞════╪═══════════════════════╪══════════════════╪════════════╪═════════╡
+│  2 │ Imaginative landscape │ '56.496'         │ NULL       │       0 │
+│  4 │ Spring outing         │ '14.76'          │ 1914-01-08 │       0 │
+│  5 │ UNITY OF INDIA        │ '56.56'          │ 2026-06-06 │       0 │
+╰────┴───────────────────────┴──────────────────┴────────────┴─────────╯
+sqlite> WHERE "deleted" = 1;       
+Parse error near line 70: near "WHERE": syntax error
+  WHERE "deleted" = 1;
+  ^--- error here
+sqlite> SELECT * FROM "collections"
+   ...> WHERE "deleted" = 1; 
+╭────┬─────────────────────────┬──────────────────┬────────────┬─────────╮
+│ id │          title          │ accession_number │  acquired  │ deleted │
+╞════╪═════════════════════════╪══════════════════╪════════════╪═════════╡
+│  1 │ Farmers working at dawn │ '11.6152'        │ 1911-08-03 │       1 │
+╰────┴─────────────────────────┴──────────────────┴────────────┴─────────╯
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> 
+sqlite> SELECT * FROM "collections"
+   ...> WHERE "deleted" != 1;
+╭────┬───────────────────────┬──────────────────┬────────────┬─────────╮
+│ id │         title         │ accession_number │  acquired  │ deleted │
+╞════╪═══════════════════════╪══════════════════╪════════════╪═════════╡
+│  2 │ Imaginative landscape │ '56.496'         │ NULL       │       0 │
+│  4 │ Spring outing         │ '14.76'          │ 1914-01-08 │       0 │
+│  5 │ UNITY OF INDIA        │ '56.56'          │ 2026-06-06 │       0 │
+╰────┴───────────────────────┴──────────────────┴────────────┴─────────╯
+sqlite>   
